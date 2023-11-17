@@ -5,6 +5,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.tmp" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/amplify/#current-cloud-backend" />
+      <excludeFolder url="file://$MODULE_DIR$/amplify/backend/api/TravelAgencyDestinationFinder/build" />
+      <excludeFolder url="file://$MODULE_DIR$/amplify/backend/auth/travelagencywebsite6ae5ae2c/build" />
+      <excludeFolder url="file://$MODULE_DIR$/amplify/backend/awscloudformation/build" />
+      <excludeFolder url="file://$MODULE_DIR$/amplify/mock-data" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
