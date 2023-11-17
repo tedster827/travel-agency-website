@@ -68,6 +68,14 @@ When committing changes, please follow this commit message format:
 `<type>(<scope>): <subject>`
 
 - **Type**: Type of change (e.g., feat, fix, docs, style, refactor, test, chore)
+
+  - feat: A new feature for the user, not a new feature for a build script.
+  - fix: A bug fix for the user, not a fix to a build script.
+  - docs: Changes to the documentation.
+  - style: Formatting, missing semi-colons, etc.; no production code change.
+  - refactor: Refactoring production code, e.g., renaming a variable.
+  - test: Adding missing tests, refactoring tests; no production code change.
+  - chore: Updating build tasks, package manager configs, etc.; no production code change.
 - **Scope**: A brief scope or context of the change (optional)
 - **Subject**: A succinct description of the change
 
@@ -150,6 +158,24 @@ amplify status
 4. Monitor the deployment process in the AWS Amplify console.
 
 Ensure that your AWS Amplify project settings are correctly configured to use the specified custom image for a successful deployment.
+
+## Known Issues
+
+Issue: AWS Amplify Node.JS Version Mismatch
+- Refer to Workaround for Node.js Version above
+
+Issue: Webpack Cache Error in Next.js
+
+Description:
+The warning [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory indicates a problem with the webpack cache in a Next.js project. This typically occurs when the system attempts to access a cache file (like 0.pack.gz) that is either missing or inaccessible in the designated directory.
+
+Steps to Troubleshoot & Resolve:
+
+Clearing the Webpack Cache
+a. Delete the .next Folder:
+Stop the Development Server: Ensure that your development server is not running.
+Delete the .next Directory: Locate and remove the .next directory in your project. This directory contains Next.js build files, including the webpack cache.
+Restart the Development Server: Use npm run dev or yarn dev to restart your development server. This process will rebuild the necessary files, including a fresh webpack cache.
 
 ## Versioning
 
