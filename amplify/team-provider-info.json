@@ -17,6 +17,12 @@
       },
       "api": {
         "TravelAgencyDestinationFinder": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d300n689yykskv",
+          "type": "cicd"
+        }
       }
     }
   }
