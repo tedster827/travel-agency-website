@@ -11,10 +11,14 @@ import React from "react";
 const Header: React.FC = () => {
     return (
         // Main Header Container
-        <header id={"header"} className={"alt"}>
-            <h1 id={"logo"}><a href="index.html">Blissful Cruises <span>Cruise and Travel Specialists</span></a></h1>
-            <nav id={"nav"}>
-                <ul>
+        <header id={"header"} className={"bg-white text-gray-800 shadow-md"}>
+            <h1 id={"logo"} className={"text-2xl font-bold italic mx-4 my-2"}>
+                <a href="page.tsx" className={"text-blue-600 hover:text-blue-800"}>Blissful Cruises
+                    <span>Cruise and Travel Specialists</span>
+                </a>
+            </h1>
+            <nav id={"nav"} className={"p-4"}>
+                <ul className={"flex space-x-4"}>
                     <li className={"current"}><a href={"index.html"}>Welcome Aboard!</a></li>
                     <li className={"submenu"}>
                         <a href={"#"}>Site Map</a>
@@ -29,3 +33,5 @@ const Header: React.FC = () => {
         </header>
     )
 }
+
+export default Header;
