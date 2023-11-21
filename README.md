@@ -151,11 +151,14 @@ For detailed instructions and best practices, refer to the [AWS IAM documentatio
 ```bash
 amplify status
 ```
-2. Open a Pull Request with Github
-(TODO npm pr)
-3. Push the code to your GitHub repository linked with AWS Amplify. Following the source control convention!
-3. AWS Amplify automatically detects the push and starts the build and deployment process.
-4. Monitor the deployment process in the AWS Amplify console.
+2. Run Pre-Pull-Request Check Script
+```bash
+npm run pull-request
+```
+3. Open a Pull Request with Github
+4. Push the code to your GitHub repository linked with AWS Amplify. Following the source control convention!
+5. AWS Amplify automatically detects the push and starts the build and deployment process.
+6. Monitor the deployment process in the AWS Amplify console.
 
 Ensure that your AWS Amplify project settings are correctly configured to use the specified custom image for a successful deployment.
 
