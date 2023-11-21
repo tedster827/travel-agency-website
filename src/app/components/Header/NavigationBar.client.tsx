@@ -25,7 +25,7 @@ const NavigationBar: React.FunctionComponent = () => {
     const menuRef = useRef<HTMLLIElement>(null);
 
     // Hook for accessing the Next.js router instance
-    const route = useRouter()
+    const router = useRouter()
 
     // Event handler for clicking the dropdown toggle button
     const toggleDropdown = (isVisible: boolean) => {
