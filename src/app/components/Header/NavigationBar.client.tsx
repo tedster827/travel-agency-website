@@ -48,6 +48,8 @@ const NavigationBar: React.FunctionComponent = () => {
             {/*Link component for client-side routing to the home page*/}
             <ul className={"flex items-center justify-between"}>
                 <li>
+                    <Link href={"/"} className={"text-blue-50 hover:text-blue-800"} >Blissful Cruises | Cruise and Travel Specialists</Link>
+                    <br></br>
                     <Link className={"text-white"} href={"/"}>Welcome Aboard!</Link>
                 </li>
                 {/*Dropdown with click and hover functionalities*/}
