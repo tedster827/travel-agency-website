@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "pull-request": "next build",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -10,6 +11,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
+    "@fortawesome/fontawesome-svg-core": "^6.4.2",
+    "@fortawesome/free-solid-svg-icons": "^6.4.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "graphql": "^16.8.1",
     "next": "14.0.2",
     "react": "^18",
