@@ -1,6 +1,12 @@
-import React, { useState } from "react";
+'use client' // Directive to mark this component as a Client Component in Next.js
+
+import React, {useRef, useState} from "react";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+
+// Font Awesome (Icon Library and Toolkit) fontawesome.com
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 
 /**
@@ -12,31 +18,70 @@ import { useRouter } from "next/router";
 
 const NavigationBar: React.FunctionComponent = () => {
     // State hook for managing the dropdown open/close
-    const [isDropdownOpen, setDropdownOpen] = useState(false)
+    const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
+    // Timeout for dropdown visibility
+    const dropdownTimeoutId = useRef<NodeJS.Timeout | null>(null)
+    // Ref for the menu container to track its DOM element (Also tells TypeScript the type of object menuRef.current
+    const menuRef = useRef<HTMLLIElement>(null);
+
     // Hook for accessing the Next.js router instance
     const route = useRouter()
 
-    // Event handler for toggling the dropdown menu's state
-    const handleDropdownToggle = () => {
-        setDropdownOpen(!isDropdownOpen)
+    // Event handler for clicking the dropdown toggle button
+    const toggleDropdown = (isVisible: boolean) => {
+        if (dropdownTimeoutId.current != null) {
+            clearTimeout(dropdownTimeoutId.current)
+        }
+
+        if(isVisible) {
+            setIsDropdownVisible(true);
+        } else {
+            // Set delay before hiding the dropdown
+            dropdownTimeoutId.current = setTimeout(() => {
+                setIsDropdownVisible(false);
+            }, 300) // Timeout for 3 seconds (300 milliseconds)
+        }
     }
 
     return (
         <nav id={"nav"} className={"bg-gray-800 p-4"}>
             {/*Link component for client-side routing to the home page*/}
-            <Link href={"/"}>
-                <a className={"text-white"}>Blissful</a>
-            </Link>
-            <ul className={"flex space-x-4"}>
-                <li className={"font-bold"}><a href={"index.html"}>Welcome Aboard!</a></li>
-                <li className={"right-0.5"}>
-                    <a href={"#"}>Site Map</a>
-                    <ul>
-                        <li><a href={"left-sidebar.html"}>Left Sidebar</a> </li>
-                        {/*{TODO: Add other navigation items as they are made}*/}
-                    </ul>
+            <ul className={"flex items-center justify-between"}>
+                <li>
+                    <Link className={"text-white"} href={"/"}>Welcome Aboard!</Link>
                 </li>
-                <li><a href={"#"} className={"button primary"}>Sign Up</a> </li>
+                {/*Dropdown with click and hover functionalities*/}
+                <li
+                    // Positioning for dropdown
+                    className={"relative"}
+                    // Attach ref to the list item
+                    ref={menuRef}
+                    onMouseEnter={() => toggleDropdown(true) }
+                    onMouseLeave={() => toggleDropdown(false) }
+                >
+                    {/*Button to toggle the dropdown menu*/}
+                    <button
+                        className={"flex items-center text-white"}
+                        onClick={() => {
+                            setIsDropdownVisible(!isDropdownVisible);
+                        }}
+                    >
+                        <FontAwesomeIcon icon={faChevronDown} className={"mr-2"}></FontAwesomeIcon>
+                        Site Map
+                    </button>
+                    {isDropdownVisible && (
+                        <ul
+                            className={"absolute bg-gray-700 p-2 mt-2 rounded shadow-lg"}
+                            onMouseEnter={() => toggleDropdown(true) }
+                            onMouseLeave={() => toggleDropdown(false) }
+                        >
+                            <li>
+                                <Link href={"/"}>Home</Link>
+                            </li>
+                            {/*{TODO: Add other navigation items as they are made}*/}
+                        </ul>
+                    )}
+                </li>
             </ul>
         </nav>
     )
