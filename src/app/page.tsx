@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "src/app/components/Header/Header";
+import Header from "src/app/components/Header/Header.client";
 
 const Home: React.FC = () =>  {
 // export default function Home ()  {
