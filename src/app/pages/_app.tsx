@@ -15,11 +15,17 @@ import '../../app/globals.css' // Global CSS Styles
  *
  * @param {AppProps} { Component, pageProps } The component and properties of the page, provided by Next.js
  * @returns {React.ReactNode} A React component that wraps the entire application
+ *
+ * FIXME: This file seems to be inactive, this might be needed for the GraphQL API integration. (It might be in the
+ * wrong directory
  */
 const MyApp = ({ Component, pageProps }: AppProps): React.ReactNode => {
+    console.log("MyApp Component has loaded")
     return (
         <ApolloProvider client={apolloClient}>
             <Component {...pageProps} />
         </ApolloProvider>
     )
 }
+
+export default MyApp;
