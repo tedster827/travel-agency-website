@@ -1,5 +1,4 @@
 import React from "react";
-import {updateDestination} from "src/graphql/mutations";
 
 interface GenericButtonProps {
     buttonText?: string,
@@ -7,6 +6,13 @@ interface GenericButtonProps {
     updatedButtonClassName?: string;
 }
 
+
+/**
+ * GenericButton (FC Functional) component for the application.
+ *
+ * This component renders a Generic Button Component for a standardized functionally and styling.
+ *
+ */
 const GenericButton: ( { buttonText, handleButtonClick }: GenericButtonProps) => React.JSX.Element = ({ buttonText = 'Button', handleButtonClick, updatedButtonClassName }: GenericButtonProps) => {
 
     return (
