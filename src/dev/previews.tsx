@@ -1,12 +1,22 @@
-import React from 'react'
-import { Previews } from '@react-buddy/ide-toolbox-next'
-import { PaletteTree } from './palette'
+import React from "react";
+import {ComponentPreview, Previews} from "@react-buddy/ide-toolbox";
+import {PaletteTree} from "./palette";
+import HomePage from "src/app/page";
+import DestinationList from "src/app/components/DestinationList";
 
 const ComponentPreviews = () => {
     return (
-        <Previews palette={<PaletteTree />}>
+        <Previews palette={<PaletteTree/>}>
+            <ComponentPreview path="/HomePage">
+                <HomePage/>
+            </ComponentPreview>
+            <ComponentPreview path="/DestinationList">
+                <DestinationList
+                    enableLikeButton={true}
+                />
+            </ComponentPreview>
         </Previews>
-    )
-}
+    );
+};
 
-export default ComponentPreviews
+export default ComponentPreviews;
