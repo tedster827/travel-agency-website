@@ -1,4 +1,4 @@
-import React, {ReactNode, useState, useRef, KeyboardEventHandler} from "react";
+import React, {ReactNode, useState, useRef} from "react";
 import Link from "next/link";
 
 interface MenuItem {
