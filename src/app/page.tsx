@@ -1,10 +1,9 @@
 'use client'
-import React, {useState} from "react";
+import React from "react";
 import Header from "src/app/components/Header/Header.client";
 import DestinationList from "src/app/components/DestinationList";
 import Alert from "src/app/components/Alert/Alert";
-import ProductCard from "src/app/components/GenericComponents/ProductCard";
-import SearchBarWithFilter from "src/app/components/GenericComponents/SearchBarWithFilter";
+import SearchBarWithFilter from "src/app/components/Generic/SearchBarWithFilter";
 
 const HomePage: React.FunctionComponent = () =>  {
 
