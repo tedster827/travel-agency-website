@@ -1,5 +1,5 @@
 import React from "react";
-import AddToCartButton from "src/app/components/GenericComponents/AddToCartButton";
+import AddToCartButton from "src/app/components/Generic/AddToCartButton";
 
 // import styles from "ProductCard.module.css"
 
