@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/*NOTE: This should ONLY be for global CSS. Component/Page based CSS should be in CSS Modules or simply use Tailwind*/a
+/*NOTE: This should ONLY be for global CSS. Component/Page based CSS should be in CSS Modules or simply use Tailwind*/
 
 /*region Default Tailwinds*/
 
