@@ -1,10 +1,12 @@
 // src/pages/_app.tsx
 
 import React from 'react' // Reach for JSX Support
-import { AppProps } from "next/app"; // AppProps type from Next.js for type-checking
-import { ApolloProvider } from "@apollo/client"; // ApolloProvider to inject Apollo Client into the React component tree
+import {AppProps} from "next/app"; // AppProps type from Next.js for type-checking
+import {ApolloProvider} from "@apollo/client"; // ApolloProvider to inject Apollo Client into the React component tree
 import apolloClient from "../../../apollo-client"; // Importing the Apollo client instance
-import '../../app/globals.css' // Global CSS Styles
+import '../../app/globals.css'
+import {DevSupport} from "@react-buddy/ide-toolbox";
+import {ComponentPreviews, useInitial} from "src/dev"; // Global CSS Styles
 
 /**
  * Custom App component to initialize pages.
@@ -19,11 +21,15 @@ import '../../app/globals.css' // Global CSS Styles
  * FIXME: This file seems to be inactive, this might be needed for the GraphQL API integration. (It might be in the
  * wrong directory
  */
-const MyApp = ({ Component, pageProps }: AppProps): React.ReactNode => {
+const MyApp = ({Component, pageProps}: AppProps): React.ReactNode => {
     console.log("MyApp Component has loaded")
     return (
         <ApolloProvider client={apolloClient}>
-            <Component {...pageProps} />
+            <DevSupport ComponentPreviews={ComponentPreviews}
+                        useInitialHook={useInitial}
+            >
+                <Component {...pageProps} />
+            </DevSupport>
         </ApolloProvider>
     )
 }
