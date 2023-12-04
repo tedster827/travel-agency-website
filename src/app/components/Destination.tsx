@@ -9,9 +9,11 @@ interface DestinationProps {
 
 const Destination: React.FunctionComponent<DestinationProps> = ({name, enableLikeButton, enableLikeCount}) => {
     const [isSelected, setIsSelected] = useState(false)
+    const [likeCount, setLikeCount] = useState(0)
 
     const handleMouseClick = () => {
         setIsSelected(!isSelected)
+        setLikeCount(likeCount + 1)
     }
 
     return (
@@ -34,6 +36,10 @@ const Destination: React.FunctionComponent<DestinationProps> = ({name, enableLik
                         <FcLikePlaceholder/>
                     }
                 </button>
+
+                }
+                {enableLikeCount && likeCount > 0 &&
+                    <span> x {likeCount}</span>
                 }
                  <span
                      className={"ml-2"}

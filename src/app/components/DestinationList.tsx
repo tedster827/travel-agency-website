@@ -56,6 +56,7 @@ const DestinationList: ({ destinations, heading, onSelection }: DestinationListP
              {
                  destinations.map((location, index) =>
                      <Destination
+                         key={location}
                          name={location}
                          enableLikeButton={true}
                          enableLikeCount={true}
