@@ -5,7 +5,6 @@ import {AppProps} from "next/app"; // AppProps type from Next.js for type-checki
 import {ApolloProvider} from "@apollo/client"; // ApolloProvider to inject Apollo Client into the React component tree
 import apolloClient from "../../../apollo-client"; // Importing the Apollo client instance
 import '../../app/globals.css'
-import {DevSupport} from "@react-buddy/ide-toolbox";
 
 /**
  * Custom App component to initialize pages.
@@ -24,11 +23,7 @@ const MyApp = ({Component, pageProps}: AppProps): React.ReactNode => {
     console.log("MyApp Component has loaded")
     return (
         <ApolloProvider client={apolloClient}>
-            <DevSupport ComponentPreviews={ComponentPreviews}
-                        useInitialHook={useInitial}
-            >
                 <Component {...pageProps} />
-            </DevSupport>
         </ApolloProvider>
     )
 }
