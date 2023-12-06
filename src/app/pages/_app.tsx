@@ -6,7 +6,6 @@ import {ApolloProvider} from "@apollo/client"; // ApolloProvider to inject Apoll
 import apolloClient from "../../../apollo-client"; // Importing the Apollo client instance
 import '../../app/globals.css'
 import {DevSupport} from "@react-buddy/ide-toolbox";
-import {ComponentPreviews, useInitial} from "src/dev"; // Global CSS Styles
 
 /**
  * Custom App component to initialize pages.

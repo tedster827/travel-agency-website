@@ -61,8 +61,5 @@ amplifytools.xcconfig
 .idea/
 *.iml
 
-# React Buddy
-src/dev/*
-
 # Visual Studio Code project files
 .vscode/

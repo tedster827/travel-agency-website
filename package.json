@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "pull-request": "next build",
+    "pull-request": "next build && next lint",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -16,7 +16,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@react-buddy/ide-toolbox": "^2.4.0",
     "graphql": "^16.8.1",
-    "next": "14.0.2",
+    "next": "^14.0.3",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.12.0"
