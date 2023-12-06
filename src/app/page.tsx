@@ -9,8 +9,8 @@ const HomePage: React.FunctionComponent = () =>  {
 
     // TODO: Fetch destinations from a graphQL API
     const destinations: string[] = [
-        'New York',
-        'San Francisco',
+        'Manila, Philippines',
+        'Berlin, Germany',
         'Tokyo',
         'London',
         'Paris'
