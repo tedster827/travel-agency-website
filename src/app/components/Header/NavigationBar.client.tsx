@@ -1,6 +1,4 @@
-'use client' // Directive to mark this component as a Client Component in Next.js
-
-import React, {useRef, useState} from "react";
+import React from "react";
 import Link from "next/link";
 
 import NavigationBarMenu from "src/app/components/Header/NavigationBarMenu.client";
