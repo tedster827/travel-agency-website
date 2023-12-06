@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "pull-request": "next build",
+    "pull-request": "next build && next lint",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -15,11 +15,13 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "graphql": "^16.8.1",
-    "next": "14.0.2",
+    "next": "^14.0.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-icons": "^4.12.0"
   },
   "devDependencies": {
+    "@aws-amplify/datastore": "^5.0.5",
     "@types/node": "18.14.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",

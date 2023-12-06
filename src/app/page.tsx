@@ -49,11 +49,13 @@ const HomePage: React.FunctionComponent = () =>  {
             destinations={destinations}
             heading="International Destinations (Click To Select)"
             onSelection={handleSelection}
+            enableLikeButton={true}
         />
         <DestinationList
             destinations={localDestinations}
             heading="Local Destinations (Click To Select)"
             onSelection={handleSelection}
+            enableLikeButton={true}
         />
       </main>
   )

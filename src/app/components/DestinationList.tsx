@@ -1,11 +1,13 @@
 'use client'
 import React, { useState } from "react";
+import Destination from "src/app/components/Destination";
 
 // Using the Typescript feature interface to define the shape or interface of this React Component (object).
 interface DestinationListProps {
     destinations: string[];
     heading: string;
     onSelection: (location: string) => void;
+    enableLikeButton: boolean;
 }
 
 
@@ -14,7 +16,7 @@ interface DestinationListProps {
  *
  * This component renders a list of destinations
  *
- * TODO: This needs to be styled
+ * TODO: This needs to be styled. The inline styling for the list items aren't making the elements inline
  *
  */
 // We can destruct the props arguments from props: DestinationListProps to { destinations, heading }:
@@ -48,21 +50,16 @@ const DestinationList: ({ destinations, heading, onSelection }: DestinationListP
          {/*The cleanest way to have something render or not is to implement a logical and. If the length is 0 then render teh paragraph*/}
          {destinations.length === 0 && <p>No Current Listings for Destinations! Check back later!</p>}
          <ul
-             className="list-disc list-inside"
+             className="list-disc"
          >
              {
                  destinations.map((location, index) =>
-                     <li
+                     <Destination
                          key={location}
-                         // Example of dynamic class setting
-                         className={selectedIndex === index ? 'list-item active:accent-blue-600 hover:bg-key-700' : 'list-item'}
-                         onClick={
-                             (onClickEvent) => handleMouseClickOnSingleLocation(onClickEvent, location, index, onSelection)
-                         }
-
-                     >
-                         {selectedIndex === index ? location + " <-- selected!" : location}
-                     </li>
+                         name={location}
+                         enableLikeButton={true}
+                         enableLikeCount={true}
+                     />
                  )
              }
          </ul>
