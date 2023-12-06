@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from "react";
-import { FcLikePlaceholder } from "react-icons/fc";
 import Destination from "src/app/components/Destination";
 
 // Using the Typescript feature interface to define the shape or interface of this React Component (object).

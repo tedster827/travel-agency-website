@@ -22,9 +22,6 @@ const Destination: React.FunctionComponent<DestinationProps> = ({name, enableLik
                  key={name}
                  // Example of dynamic class setting/
                  className={'inline-block mr-2'}
-                 onClick={
-                     (handleMouseClick)
-                 }
             >
                 {enableLikeButton &&
                 <button onClick={handleMouseClick}
@@ -39,7 +36,7 @@ const Destination: React.FunctionComponent<DestinationProps> = ({name, enableLik
 
                 }
                 {enableLikeCount && likeCount > 0 &&
-                    <span> x {likeCount}</span>
+                    <span> x{likeCount}</span>
                 }
                  <span
                      className={"ml-2"}
