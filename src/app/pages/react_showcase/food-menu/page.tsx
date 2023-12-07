@@ -20,7 +20,7 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
             },
             {
                 name: "Morning Rush Ice Coffee",
-                description: "Simple coffee over ice, that's discounted for a limited time!",
+                description: "Simple coffee over ice, that\'s discounted for a limited time!",
                 price: "2.00",
                 currencySymbol: "$"
             }
@@ -88,7 +88,9 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
         >
             <h1
                 className={"text-3xl font-bold text-gray-800 hover:text-indigo-600 transition duration-300"}
-            >Tedster's Taste Cafe</h1>
+            >
+                {"Tedster\'s Taste Cafe"}
+            </h1>
             <ul>
                 {drinks.map((drink): React.JSX.Element => {
                     return (
@@ -112,7 +114,7 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
                     <h2
                         className={"text-gray-600 hover:text-red-500  transition duration-300"}
                     >
-                        Today's Special: $1 Off Matcha Lattes!
+                        {"Today\'s Special: $1 Off Matcha Lattes!"}
                     </h2>
                     <button
                         className={"btn mt-3"}
