@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import FoodItem from "src/app/pages/react_showcase/food-menu/FoodItem";
 import doStringOperationOnStringDollarAmount from "src/app/pages/react_showcase/food-menu/helpers/doStringOperation";
 
-const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
+const FoodMenuPage: React.FunctionComponent = () => {
     const [drinks, setDrinks] = useState(
         [
             {
