@@ -1,6 +1,7 @@
 'use client'
 import React, {useState} from "react";
 import FoodItem from "src/app/pages/react_showcase/food-menu/FoodItem";
+import doStringOperationOnStringDollarAmount from "src/app/pages/react_showcase/food-menu/helpers/doStringOperation";
 
 const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
     const [drinks, setDrinks] = useState(
@@ -16,24 +17,70 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
                 description: "Simple coffee over ice, but not too much ice!",
                 price: "3.50",
                 currencySymbol: "$"
+            },
+            {
+                name: "Morning Rush Ice Coffee",
+                description: "Simple coffee over ice, that's discounted for a limited time!",
+                price: "2.00",
+                currencySymbol: "$"
             }
         ]
     )
 
+    const [wasSurpriseActivated, setWasSurpriseActivated] = useState<boolean>(false)
+
     const [isDiscountApplied, setIsDiscountApplied] = useState(false)
-    const [drink, setDrink] = useState({
-        title: "Iced Coffee",
-        price: 3.50
-    })
+
+    // 30 Second Timeout for Limited Timed Items
+    // const [timer, setTimer] = useState<number>(30)
+
     const currencySymbol = "$"
 
     const handleDiscountButton = () => {
-        setDrink({
-            ...drink,
-            price: 2.50
-        })
+        setDrinks(drinks.map((drink) => {
+           return drink.name !== "Matcha Latte" ? drink : {
+               name: drink.name + " - ✨ Discount Applied",
+               description: drink.description,
+               price: doStringOperationOnStringDollarAmount(drink.price, "-", 1) +  "✨",
+               currencySymbol: drink.currencySymbol
+           }
+        }))
         setIsDiscountApplied(true)
     }
+
+    const handleSurpriseButton = () => {
+        setWasSurpriseActivated(true)
+        setDrinks([...drinks, {
+            name: "✨ Tiger Boba Coffee ✨",
+            description: "Brown Sugar Milk + Boba Pearl with Espresso + Cream Mousse",
+            price: "4.00",
+            currencySymbol: "$"
+        }])
+    }
+
+    // useEffect(() => {
+    //
+    //     const interval = setInterval(() => {
+    //         setTimer(prevTimer => prevTimer - 1)
+    //     }, 1000);
+    //
+    //     const limitedTimeItemTimeout = setTimeout(() => {
+    //         setDrinks(drinks.filter(drink => drink.name !== "Matcha Latte"));
+    //         clearInterval(interval)
+    //     }, 300000);
+    //
+    //     setDrinks(drinks.map((drink) => {
+    //        return drink.name !== "Matcha Latte" ? drink : {
+    //            name: drink.name + "- ⏰ Limited Time Price! Offer Ends In: " + timer + " Seconds",
+    //            description: drink.description,
+    //            price: doStringOperationOnStringNumber(drink.price, "-", 1),
+    //            currencySymbol: drink.currencySymbol
+    //        }
+    //     }))
+    //
+    //     return () => clearTimeout(limitedTimeItemTimeout)
+    //
+    // }, []);
 
     return (
         <div
@@ -74,6 +121,14 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
                         Apply {currencySymbol}1 Discount
                     </button>
                 </div>
+            }
+            {!wasSurpriseActivated &&
+                <button
+                    className={"btn mt-3"}
+                    onClick={handleSurpriseButton}
+                >
+                    🤫 A Surprise! 🎉
+                </button>
             }
         </div>
     )
