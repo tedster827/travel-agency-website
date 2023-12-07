@@ -39,18 +39,17 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
         <div
             className={"m-5"}
         >
-            <h1>Tedster's Taste Restaurant</h1>
-            <ul className={"list-disc"}>
-                <li>
-                    {drink.title} - {currencySymbol + drink.price.toFixed(2)}
-                    {isDiscountApplied && <p>{currencySymbol}1 Discount Applied! 😄🤑</p>}
-                </li>
-            </ul>
+            <h1
+                className={"text-3xl font-bold text-gray-800 hover:text-indigo-600 transition duration-300"}
+            >Tedster's Taste Cafe</h1>
             <ul>
                 {drinks.map((drink): React.JSX.Element => {
                     return (
-                        <li>
+                        <li
+                            key={drink.name}
+                        >
                             <FoodItem
+                                key={drink.name}
                                 name={drink.name}
                                 description={drink.description}
                                 price={drink.price}
@@ -60,12 +59,21 @@ const FoodMenuPage: React.FunctionComponent<React.JSX.Element> = () => {
                 })}
             </ul>
             {!isDiscountApplied &&
-                <button
-                    className={"btn"}
-                    onClick={handleDiscountButton}
+                <div
+                    className={"mb-4 p-4 inline-block"}
                 >
-                    Apply {currencySymbol}1 Discount
-                </button>
+                    <h2
+                        className={"text-gray-600 hover:text-red-500  transition duration-300"}
+                    >
+                        Today's Special: $1 Off Matcha Lattes!
+                    </h2>
+                    <button
+                        className={"btn mt-3"}
+                        onClick={handleDiscountButton}
+                    >
+                        Apply {currencySymbol}1 Discount
+                    </button>
+                </div>
             }
         </div>
     )
