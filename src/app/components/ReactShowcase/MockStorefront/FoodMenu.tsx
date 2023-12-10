@@ -1,9 +1,9 @@
 'use client'
 import React, {useState} from "react";
-import FoodItem from "src/app/pages/react_showcase/food-menu/FoodItem";
-import doStringOperationOnStringDollarAmount from "src/app/pages/react_showcase/food-menu/helpers/doStringOperation";
+import FoodItem from "src/app/components/ReactShowcase/MockStorefront/FoodItem";
+import doStringOperationOnStringDollarAmount from "src/app/pages/react_showcase/storefront/helpers/doStringOperation";
 
-const FoodMenuPage: React.FunctionComponent = () => {
+const FoodMenu: React.FunctionComponent = () => {
     const [drinks, setDrinks] = useState(
         [
             {
@@ -31,18 +31,14 @@ const FoodMenuPage: React.FunctionComponent = () => {
 
     const [isDiscountApplied, setIsDiscountApplied] = useState(false)
 
-    // 30 Second Timeout for Limited Timed Items
-    // const [timer, setTimer] = useState<number>(30)
-
     const currencySymbol = "$"
 
     const handleDiscountButton = () => {
         setDrinks(drinks.map((drink) => {
            return drink.name !== "Matcha Latte" ? drink : {
+               ...drink,
                name: drink.name + " - ✨ Discount Applied",
-               description: drink.description,
                price: doStringOperationOnStringDollarAmount(drink.price, "-", 1) +  "✨",
-               currencySymbol: drink.currencySymbol
            }
         }))
         setIsDiscountApplied(true)
@@ -57,30 +53,6 @@ const FoodMenuPage: React.FunctionComponent = () => {
             currencySymbol: "$"
         }])
     }
-
-    // useEffect(() => {
-    //
-    //     const interval = setInterval(() => {
-    //         setTimer(prevTimer => prevTimer - 1)
-    //     }, 1000);
-    //
-    //     const limitedTimeItemTimeout = setTimeout(() => {
-    //         setDrinks(drinks.filter(drink => drink.name !== "Matcha Latte"));
-    //         clearInterval(interval)
-    //     }, 300000);
-    //
-    //     setDrinks(drinks.map((drink) => {
-    //        return drink.name !== "Matcha Latte" ? drink : {
-    //            name: drink.name + "- ⏰ Limited Time Price! Offer Ends In: " + timer + " Seconds",
-    //            description: drink.description,
-    //            price: doStringOperationOnStringNumber(drink.price, "-", 1),
-    //            currencySymbol: drink.currencySymbol
-    //        }
-    //     }))
-    //
-    //     return () => clearTimeout(limitedTimeItemTimeout)
-    //
-    // }, []);
 
     return (
         <div
@@ -136,4 +108,4 @@ const FoodMenuPage: React.FunctionComponent = () => {
     )
 }
 
-export default FoodMenuPage;
+export default FoodMenu;

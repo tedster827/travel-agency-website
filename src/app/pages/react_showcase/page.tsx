@@ -14,7 +14,13 @@ const ShowcaseHomePage: React.FunctionComponent = () => {
                     <Link href={'/pages/react_showcase/stopwatch'}>Stopwatch</Link>
                 </li>
                 <li>
-                    <Link href={'/pages/react_showcase/food-menu'}>Food Menu</Link>
+                    <Link href={'/pages/react_showcase/storefront'}>Mock Storefront</Link>
+                </li>
+                <li>
+                    <Link href={'/pages/react_showcase/simple-game'}>Simple Game</Link>
+                </li>
+                <li>
+                    <Link href={'/pages/react_showcase/simple-pizza-app'}>Simple Pizza App</Link>
                 </li>
             </ul>
         </>
