@@ -3,7 +3,7 @@ import React from "react"
 
 interface AddCartItemsButtonsProps {
     availableItems: any[]
-    handleAddItemToCart: (itemName: string) => void;
+    handleAddItemToCart: (itemName: number) => void;
 }
 
 const AddCartItemsButtons: React.FunctionComponent<AddCartItemsButtonsProps> = ({availableItems, handleAddItemToCart}: AddCartItemsButtonsProps) => {
@@ -14,7 +14,7 @@ const AddCartItemsButtons: React.FunctionComponent<AddCartItemsButtonsProps> = (
                     return (
                         <button
                             className={"btn mx-3"}
-                            key={item.name} onClick={() => handleAddItemToCart(item.name)}
+                            key={item.id} onClick={() => handleAddItemToCart(item.id)}
                         >
                             Add {item.name} to cart
                         </button>
