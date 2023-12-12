@@ -1,10 +1,11 @@
 import React from "react"
-import Form from "src/app/components/Generic/Form";
+// NOTE: import Form from "src/app/components/Generic/Form";
+import FormShorterWithoutUsingRef from "src/app/components/Generic/FormShorterWithoutUsingRef";
 
 const MarketingSignUpPage: React.FunctionComponent = () => {
     return (
         <div>
-            <Form name={"Email Sign Up"}/>
+            <FormShorterWithoutUsingRef name={"Email Sign Up"}/>
         </div>
     )
 }
