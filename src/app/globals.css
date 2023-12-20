@@ -6,26 +6,22 @@
 
 /*NOTE: This should ONLY be for global CSS. Component/Page based CSS should be in CSS Modules or simply use Tailwind*/
 
-/*region Default Tailwinds*/
+/*region Current Configuration*/
 
 /*Definition of custom properties*/
-:root {
-  --foreground-rgb: 0, 0, 0;
-}
 
-/* This is for seeing if the user's system is using 'dark mode' or not */
+/* TODO: This is for seeing if the user's system is using 'dark mode' or not */
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 0, 0, 0;
+    /*--foreground-rgb: 0, 0, 0;*/
   }
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  padding: 1em;
+  /*color: rgb(var(--foreground-rgb));*/
+  padding: 20px;
 }
 /*endregion*/
-
 
 /*region Default TailWinds*/
 /*:root {*/

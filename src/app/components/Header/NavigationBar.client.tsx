@@ -24,7 +24,8 @@ const NavigationBar: React.FunctionComponent = () => {
 
     const listOfMenuItems: MenuItem[] = [
         { name: "Home", linkPath: "/" },
-        { name: "Users", linkPath: "/pages/users" }
+        { name: "Users", linkPath: "/pages/users" },
+        { name: "React Showcase", linkPath: "/pages/react_showcase/" }
     ]
 
 
