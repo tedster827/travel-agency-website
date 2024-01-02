@@ -27,6 +27,11 @@ const ExpenseList = ({ expenseFilters, expenses }: ExpenseListProps) => {
         <label className={"form-control w-full max-w-xs mb-4"}>
           <div className={"label"}>
             <span className={"label-text"}>Filter Expenses</span>
+            <div className="indicator">
+              <span className="indicator-item badge badge-secondary">
+                In Development! Filters May Not Function!
+              </span>
+            </div>
           </div>
           <select
             id={"selectedCategory"}
