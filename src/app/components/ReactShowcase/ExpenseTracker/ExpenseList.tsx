@@ -11,8 +11,6 @@ interface ExpenseListProps {
 const ExpenseList = ({ expenseFilters, expenses }: ExpenseListProps) => {
   const [currentFilter, setCurrentFilter] = useState<string>("NONE");
 
-  console.log("Expense List Data:");
-  console.log(expenses);
   return (
     <div className={"mt-5"}>
       <div className={"border flex flex-row items-center gap-4 p-4 mb-2"}>
