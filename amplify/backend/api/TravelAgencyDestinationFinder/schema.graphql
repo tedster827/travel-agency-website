@@ -1,0 +1,57 @@
+# NOTE: This is a GraphQL Schema that uses the v2 Transformer for AWS Amplify (not v1)
+# https://docs.amplify.aws/javascript/tools/cli/migration/transformer-migration/
+
+"""
+NOTE: Example GraphQL Query with full explanations
+The destination type represents a travel destination with its details.
+- The is a CORE ENTITY - Secondary Entity is Review
+@model Directive
+- Provided by AWS Amplify to be used by AWS Amplify to automatically create a DynamoDB table for this type and setup
+the necessary CRUDL (Create, Read, Update, Delete, List) Operations and resolvers
+- This also means that the data model is persistent
+@auth Directive specifies the authorization rule that only gives access to the owner
+"""
+type Destination
+  @model
+  @auth(rules: [{ allow: owner }])
+{
+  id: ID! # Implicit primary key for the Destination type
+  name: String!
+  description: String
+  """
+  @hasMany: Defines a one-to-many relationship between Destination and Review.
+  - 'indexName' specifies the name of the index to use for the relationship.
+  - 'fields' indicates the field in the Destination type to link with the index.
+  """
+  reviews: [Review] @hasMany(indexName: "destinationID", fields: ["id"])
+}
+
+"""
+The Review type represents a review made by a user for a destination.
+- This is a SECONDARY ENTITY - Core Entity is Destination
+@model: Sets up CRUDL operations and a DynamoDB table for Review.
+@auth: Specifies authorization rules; in this case, only the owner has access.
+"""
+type Review
+  @model
+  @auth(rules: [{ allow: owner }])
+{
+  id: ID! # Type ! means that this is a Non-Null Type, i.e. it must return a value
+  title: String!
+  content: String
+  """
+  destinationID: An indexed field that links a Review to its Destination.
+  @index: Creates a secondary index named 'byDestination' for efficient querying.
+  - 'sortKeyFields' can be used to add a sort key for more query options.
+  """
+  destinationID: ID! @index(name: "destinationID", sortKeyFields: ["title"])
+  # NOTE: Connection Type: Many Review to One Destination (n-to-1)
+  """
+  @belongsTo: Defines a many-to-one relationship between Review and Destination.
+  - 'fields' indicates the field in the Review type that stores the reference to Destination.
+  """
+  destination: Destination @belongsTo(fields: ["destinationID"])
+}
+
+
+
