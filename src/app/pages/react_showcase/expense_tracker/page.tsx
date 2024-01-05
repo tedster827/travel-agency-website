@@ -1,9 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import AddExpenseForm from "src/app/components/ReactShowcase/ExpenseTracker/AddExpenseForm";
-import ExpenseList from "src/app/components/ReactShowcase/ExpenseTracker/ExpenseList";
+import AddExpenseForm from "src/projects-and-modules/react-showcase-project/components/ExpenseTracker/AddExpenseForm";
+import ExpenseList from "src/projects-and-modules/react-showcase-project/components/ExpenseTracker/ExpenseList";
 import { FieldValues } from "react-hook-form";
-import { type } from "os";
 
 // NOTE: This is the global definition of Expense for now
 export type Expense = {

@@ -1,7 +1,7 @@
 "use client";
 import React, { ChangeEvent, useState } from "react";
 import { Expense } from "src/app/pages/react_showcase/expense_tracker/page";
-import calculateExpenseTotal from "src/app/components/ReactShowcase/ExpenseTracker/calculateExpenseTotal";
+import calculateExpenseTotal from "src/projects-and-modules/react-showcase-project/components/ExpenseTracker/calculateExpenseTotal";
 
 interface ExpenseListProps {
   expenseFilters: string[];
@@ -68,8 +68,7 @@ const ExpenseList = ({
             <th>Expense</th>
             <th>Amount</th>
             <th>Category</th>
-            {/*NOTE: This header is used for spacing purposes*/}
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>

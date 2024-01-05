@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 // NOTE: to useFrom the component must be a client-side component!
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -48,7 +48,7 @@ const AddExpenseForm = ({ handleAddExpense }: AddExpenseFromProps) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(expenseFormSchema) });
 
   return (
@@ -92,10 +92,10 @@ const AddExpenseForm = ({ handleAddExpense }: AddExpenseFromProps) => {
           <select
             id={"category"}
             className={"select select-bordered"}
-            defaultValue={"NONE"}
+            defaultValue={"🤨 Other"}
             {...register("category")}
           >
-            <option disabled value={"NONE"}>
+            <option disabled value={"🤨 Other"}>
               ️Click to Select a Category
             </option>
             <option value={"🏎️ Auto"}>🏎️ Auto</option>
