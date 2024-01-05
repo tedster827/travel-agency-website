@@ -6,9 +6,14 @@ import calculateExpenseTotal from "src/app/components/ReactShowcase/ExpenseTrack
 interface ExpenseListProps {
   expenseFilters: string[];
   expenses: Expense[];
+  handleDeleteButtonClick: (description: string, index: number) => void;
 }
 
-const ExpenseList = ({ expenseFilters, expenses }: ExpenseListProps) => {
+const ExpenseList = ({
+  expenseFilters,
+  expenses,
+  handleDeleteButtonClick,
+}: ExpenseListProps) => {
   const [currentFilter, setCurrentFilter] = useState<string>("NONE");
 
   const handleFilterSelection = (
@@ -63,11 +68,12 @@ const ExpenseList = ({ expenseFilters, expenses }: ExpenseListProps) => {
             <th>Expense</th>
             <th>Amount</th>
             <th>Category</th>
+            {/*NOTE: This header is used for spacing purposes*/}
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {expenses.map((expense, index) => {
-            console.log("Current Expense: " + expense.description);
             if (
               currentFilter === "NONE" ||
               currentFilter === expense.category
@@ -75,15 +81,31 @@ const ExpenseList = ({ expenseFilters, expenses }: ExpenseListProps) => {
               return (
                 <tr key={index}>
                   <td>{expense.description}</td>
-                  <td>{expense.amount}</td>
+                  <td>${expense.amount}</td>
                   {/*Take Note: category is the expense's filter category. The values should be the same when
                      filtering.*/}
                   <td>{expense.category}</td>
+                  <td>
+                    <button
+                      onClick={() =>
+                        handleDeleteButtonClick(expense.description, index)
+                      }
+                      className={"btn btn-outline btn-xs btn-error"}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               );
             }
             return;
           })}
+          {expenses.length < 1 && (
+            <tr key={0}>
+              <td>⚠️ No items to display!</td>
+              <td>Add an expense above!</td>
+            </tr>
+          )}
         </tbody>
       </table>
     </div>
