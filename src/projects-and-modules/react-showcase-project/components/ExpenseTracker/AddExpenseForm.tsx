@@ -103,7 +103,7 @@ const AddExpenseForm = ({ handleAddExpense }: AddExpenseFromProps) => {
             <option value={"🤨 Other"}>🤨 Other</option>
           </select>
         </label>
-        <button className={"btn btn-primary"} type={"submit"}>
+        <button className={"mt-2 btn btn-primary"} type={"submit"}>
           Add Expense
         </button>
       </form>
