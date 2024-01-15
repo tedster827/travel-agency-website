@@ -22,7 +22,9 @@ const expenseFormSchema = z.object({
       required_error: "An amount is required.",
       invalid_type_error: "This value needs to be a dollar amount.",
     })
-    // // value must be between Number.MIN_SAFE_INTEGER and Number.MAX_SAFE_INTEGER
+    .min(0.0)
+    .max(9_000_000_000_000)
+    // TODO: Refine and implement // value must be between Number.MIN_SAFE_INTEGER and Number.MAX_SAFE_INTEGER
     // .safe({
     //   message:
     //     "You have entered a value that is greater than 9 Trillion or a value that is less than negative 9 Trillion." +
@@ -36,74 +38,94 @@ const expenseFormSchema = z.object({
   }),
 });
 
-type FormData = z.infer<typeof expenseFormSchema>;
-
-let errorTextColor: string = "text-rose-400";
+type ExpenseFormData = z.infer<typeof expenseFormSchema>;
 
 interface AddExpenseFromProps {
+  expenseFilters: string[];
   handleAddExpense: (data: FieldValues) => void;
+  errorTextColor: string;
+  isAuthenticated: boolean;
 }
 
-const AddExpenseForm = ({ handleAddExpense }: AddExpenseFromProps) => {
+const AddExpenseForm = ({
+  expenseFilters,
+  handleAddExpense,
+  errorTextColor,
+  isAuthenticated,
+}: AddExpenseFromProps) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(expenseFormSchema) });
+  } = useForm<ExpenseFormData>({ resolver: zodResolver(expenseFormSchema) });
 
   return (
     <div className={"mt-3 flex items-center"}>
-      <form onSubmit={handleSubmit(handleAddExpense)}>
-        <h2 className={"mt-2 text-lg"}>Add An Expense</h2>
-        <div className={"mb-3"}>
-          <label htmlFor={"description"} className={"form-label"}>
-            Expense Description
-          </label>
-          <input
-            id={"description"}
-            type={"text"}
-            className={"form-control input input-bordered w-full max-w-xs"}
-            {...register("description")}
-          />
-          {errors.description && (
-            <p className={errorTextColor + " "}>{errors.description.message}</p>
-          )}
-        </div>
-        <div className={"mb-3"}>
-          <label htmlFor={"amount"} className={"form-label"}>
-            Amount
-          </label>
-          <input
-            id={"amount"}
-            type={"number"}
-            className={"form-control input input-bordered w-full max-w-xs"}
-            {...register("amount", {
-              valueAsNumber: true,
-            })}
-          />
-          {errors.amount && (
-            <p className={errorTextColor + " "}>{errors.amount.message}</p>
-          )}
-        </div>
-        <label className={"form-control w-full max-w-xs mb-4"}>
-          <div className={"label"}>
-            <span className={"label-text"}>Expense Category</span>
+      <form
+        onSubmit={handleSubmit((data) => {
+          handleAddExpense(data);
+          reset();
+        })}
+      >
+        <div className={"mb-4"}>
+          <h2 className={"mt-2 text-lg"}>Add An Expense</h2>
+          <div className={"mb-3"}>
+            <label htmlFor={"description"} className={"form-label"}>
+              Expense Description
+            </label>
+            <input
+              id={"description"}
+              type={"text"}
+              className={"form-control input input-bordered w-full max-w-xs"}
+              {...register("description")}
+            />
+            {errors.description && (
+              <p className={errorTextColor + " "}>
+                {errors.description.message}
+              </p>
+            )}
           </div>
-          <select
-            id={"category"}
-            className={"select select-bordered"}
-            defaultValue={"🤨 Other"}
-            {...register("category")}
-          >
-            <option disabled value={"🤨 Other"}>
-              ️Click to Select a Category
-            </option>
-            <option value={"🏎️ Auto"}>🏎️ Auto</option>
-            <option value={"🏡️ Home"}>🏡️ Home</option>
-            <option value={"🤨 Other"}>🤨 Other</option>
-          </select>
-        </label>
-        <button className={"mt-2 btn btn-primary"} type={"submit"}>
+          <div className={"mb-3"}>
+            <label htmlFor={"amount"} className={"form-label"}>
+              Amount
+            </label>
+            <input
+              id={"amount"}
+              type={"number"}
+              className={"form-control input input-bordered w-full max-w-xs"}
+              {...register("amount", {
+                valueAsNumber: true,
+              })}
+            />
+            {errors.amount && (
+              <p className={errorTextColor + " "}>{errors.amount.message}</p>
+            )}
+          </div>
+          <label className={"form-control w-full max-w-xs mb-4"}>
+            <div className={"label"}>
+              <span className={"label-text"}>Expense Category</span>
+            </div>
+            <select
+              id={"category"}
+              className={"select select-bordered"}
+              defaultValue={"🤨 Other"}
+              {...register("category")}
+            >
+              <option disabled value={"🤨 Other"}>
+                ️Click to Select a Category
+              </option>
+              {expenseFilters.map((filter: string, index: number) => {
+                return (
+                  <option key={index} value={filter}>
+                    {filter}
+                  </option>
+                );
+              })}
+            </select>
+          </label>
+        </div>
+        <button className={"mt-4 btn btn-primary"} type={"submit"}>
           Add Expense
         </button>
       </form>
