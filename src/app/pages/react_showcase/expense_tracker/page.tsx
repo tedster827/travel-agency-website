@@ -4,6 +4,11 @@ import AddExpenseForm from "src/projects-and-modules/react-showcase-project/comp
 import ExpenseList from "src/projects-and-modules/react-showcase-project/components/ExpenseTracker/ExpenseList";
 import { FieldValues } from "react-hook-form";
 
+// Note: This code can supersede the defined store configuration state below, however it's better to have the config
+//  control the expenseFilters not this export. It's better because we could call a future API that will have a
+//  whole store's configuration.
+// export const expenseFilters = ["🏎️ Auto", "🏡️ Home", "🤨 Other"] as cosnt;
+
 // NOTE: This is the global definition of Expense for now
 export type Expense = {
   description: string;
@@ -14,13 +19,18 @@ export type Expense = {
 type ExpenseTrackerConfig = {
   expenseFilters: string[];
   currentExpenses: Expense[];
+  errorTextColor: string;
 };
 
 const ExpenseTrackerPage: React.FunctionComponent = () => {
+  // FIXME: This is a temporary hardcoded value till the authentication service is up and running
+  const userAuthenticated: boolean = true;
+
   const [expenseTrackerConfig, setExpenseTrackerConfig] =
     useState<ExpenseTrackerConfig>({
-      expenseFilters: [],
+      expenseFilters: ["🏎️ Auto", "🏡️ Home", "🤨 Other"],
       currentExpenses: [],
+      errorTextColor: "text-rose-400",
     });
 
   const handleExpenseAddition = (data: FieldValues) => {
@@ -38,7 +48,7 @@ const ExpenseTrackerPage: React.FunctionComponent = () => {
         newExpenseAddition,
       ];
 
-      // Update Filters if needed
+      // Update Filters if needed. If it already exists, don't update.
       const updatedFilters = prevConfig.expenseFilters.includes(data.category)
         ? prevConfig.expenseFilters
         : [...prevConfig.expenseFilters, data.category];
@@ -64,19 +74,22 @@ const ExpenseTrackerPage: React.FunctionComponent = () => {
         );
 
       // TODO: Add logic to delete the category from config, if no more items are there with that category
-
-      let newExpenseConfig = {
+      return {
         ...prevExpenseConfigState,
         currentExpenses: expensesWithoutItemToDelete,
       };
-      return newExpenseConfig;
     });
   };
 
   return (
     <div className={"place-content-evenly m-3"}>
       <h1 className={"text-xl"}>Expense Tracker Page</h1>
-      <AddExpenseForm handleAddExpense={handleExpenseAddition} />
+      <AddExpenseForm
+        expenseFilters={expenseTrackerConfig.expenseFilters}
+        handleAddExpense={handleExpenseAddition}
+        errorTextColor={expenseTrackerConfig.errorTextColor}
+        isAuthenticated={userAuthenticated}
+      />
       <ExpenseList
         expenseFilters={expenseTrackerConfig.expenseFilters}
         expenses={expenseTrackerConfig.currentExpenses}
