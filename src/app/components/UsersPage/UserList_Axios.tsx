@@ -1,35 +1,7 @@
 "use client";
-import axios, { AxiosError, CanceledError } from "axios";
+import apiClient, { CanceledError } from "src/services/api-client";
 import React, { useEffect, useState } from "react";
-
-interface Full_User {
-  address: {
-    city: string;
-    geo: {
-      lat: string;
-      long: string;
-    };
-    street: string;
-    suite: string;
-    zipcode: string;
-  };
-  company: {
-    bs: string;
-    catchPhrase: string;
-    name: string;
-  };
-  email: string;
-  id: number;
-  name: string;
-  phone: string;
-  username: string;
-  website: string;
-}
-
-interface Simple_User {
-  id: number;
-  name: string;
-}
+import UserService, { Simple_User } from "src/services/user-service";
 
 const UserList_Axios: React.FunctionComponent = () => {
   const [users, setUsers] = useState<Simple_User[]>([]);
@@ -42,11 +14,8 @@ const UserList_Axios: React.FunctionComponent = () => {
   useEffect(() => {
     const controller = new AbortController();
     setIsLoading(true);
-    axios
-      // GET --Returns--> Promoise --Returns If Resolved--> Response !--Return If Error--> Error
-      .get<Simple_User[]>("https://jsonplaceholder.typicode.com/users", {
-        signal: controller.signal,
-      })
+    const { request, cancel } = UserService.getAllUsers();
+    request
       .then((response) => {
         setUsers(response.data);
         setIsLoading(false);
@@ -61,9 +30,7 @@ const UserList_Axios: React.FunctionComponent = () => {
     // .finally(() => {
     //   setIsLoading(false);
     // });
-    return () => {
-      controller.abort();
-    };
+    return () => cancel();
   }, []); // Note: Never forget to add this! Without this it will cause infinite renders!
 
   // Web Call with await and async
@@ -97,11 +64,64 @@ const UserList_Axios: React.FunctionComponent = () => {
         }
       }),
     );
-    axios
-      .delete("https://jsonplaceholder.typicode.com/users/" + user.id)
+    const { request } = UserService.deleteSingleUser(user);
+    request.catch((error) => {
+      setError(error.message);
+      setUsers(originalUsers);
+    });
+  };
+
+  // Note: This is using an optimistic updated method, update UI first even if there may be an error. However, it
+  //  will revert the UI if an error is returned.
+  const addUser = () => {
+    setIsLoading(true);
+    const originalUsers: Simple_User[] = [...users];
+    const newUser: Simple_User = { id: 0, name: "Tedster" };
+    setUsers([...users, newUser]);
+
+    const { request } = UserService.addSingleUser(newUser);
+
+    request
+      // This form of destructing is adding a reference to data to be referred to as savedUser
+      .then(({ data: savedUser }) => {
+        setUsers([savedUser, ...users]);
+        setIsLoading(false);
+      })
       .catch((error) => {
         setError(error.message);
         setUsers(originalUsers);
+        setIsLoading(false);
+      });
+  };
+
+  // Note: This is using an optimistic updated method, update UI first even if there may be an error. However, it
+  //  will revert the UI if an error is returned.
+  const updateUser = (user: Simple_User) => {
+    setIsLoading(true);
+    const originalUsers: Simple_User[] = [...users];
+    const updatedUser: Simple_User = {
+      ...user,
+      name: user.name + "! - Edited",
+    };
+    setUsers(
+      users.map((user) => {
+        if (user.id === updatedUser.id) {
+          return updatedUser;
+        }
+        return user;
+      }),
+    );
+
+    const { request } = UserService.updateSingleUser(updatedUser);
+
+    request
+      .catch((error) => {
+        setError(error.message);
+        setUsers(originalUsers);
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -111,13 +131,16 @@ const UserList_Axios: React.FunctionComponent = () => {
         {isLoading && (
           <span className={"loading loading-spinner text-info"}></span>
         )}
+        <button className={"btn btn-primary mb-3"} onClick={addUser}>
+          Add User
+        </button>
         <div className={"overflow-x-auto"}>
           <table className={"table table-xs table-pin-rows table-pin-cols"}>
             <thead>
               <tr>
                 <th></th>
                 <td>Name</td>
-                <td>Action</td>
+                <td>Actions</td>
                 <th></th>
               </tr>
             </thead>
@@ -129,12 +152,24 @@ const UserList_Axios: React.FunctionComponent = () => {
                    elements*/}
                     <td>{user.id}</td>
                     <td>{user.name}</td>
-                    <button
-                      className="btn btn-outline btn-error"
-                      onClick={() => deleteUser(user)}
-                    >
-                      Delete
-                    </button>
+                    <td>
+                      <div className={"m-1"}>
+                        <button
+                          className={"btn btn-outline-secondary mx-1"}
+                          onClick={() => {
+                            updateUser(user);
+                          }}
+                        >
+                          Update
+                        </button>
+                        <button
+                          className="btn btn-outline btn-error"
+                          onClick={() => deleteUser(user)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
