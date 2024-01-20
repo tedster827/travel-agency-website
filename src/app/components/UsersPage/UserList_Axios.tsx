@@ -1,55 +1,11 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import UserService, { Simple_User } from "src/services/user-service";
-import { CanceledError } from "src/services/api-client";
+import useUsers from "src/hooks/useUsers";
 
 const UserList_Axios: React.FunctionComponent = () => {
-  const [users, setUsers] = useState<Simple_User[]>([]);
-  const [error, setError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  // Note: Whenever using a fetch operation for a web request always include a cleanup function so that the fetch
-  //  can be cancelled! Use AbortController a Browser API for modern browsers! It is used to cancel or abort
-  //  asynchronous, or any long, operations. This also prevents calling the server twice!
-  useEffect(() => {
-    setIsLoading(true);
-    const { request, cancel } = UserService.getAll<Simple_User>();
-    request
-      .then((response) => {
-        setUsers(response.data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        // If the message is because of an abortion, then do not update the error state variable.
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(false);
-      });
-    // The finally method is for when the promise above has been resolved regardless if it resulted in error or not.
-    // .finally(() => {
-    //   setIsLoading(false);
-    // });
-    return () => cancel();
-  }, []); // Note: Never forget to add this! Without this it will cause infinite renders!
-
-  // Web Call with await and async
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await axios.get<Simple_User[]>(
-  //         "https://jsonplaceholder.typicode.com/users",
-  //       );
-  //       setUsers(response.data);
-  //     } catch (error) {
-  //       // Note: Type annotation is not allowed in catch clause you must wrap your data in parenthesis and then tell
-  //       //  the Typescript compiler what object the data is.
-  //       setError((error as AxiosError).message);
-  //     }
-  //   };
-  //
-  //   fetchUsers();
-  // }, []); // Note: Never forget to add this! Without this it will cause infinite renders!
-
+  const { users, setUsers, error, setError, isLoading, setIsLoading } =
+    useUsers();
   // Note: We're using an optimistic approach where we're hoping that the server will not return an error and we're
   //  going to immediately going to update the UI, even if there could be an error.
   const deleteUser = (user: Simple_User) => {
