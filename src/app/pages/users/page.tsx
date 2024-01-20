@@ -1,52 +1,16 @@
-import React from "react";
+// noinspection ES6UnusedImports
 
-interface User {
-    id: number;
-    name: string;
-    email: string;
-}
+import React from "react";
+import UserList_Fetch from "src/app/components/UsersPage/UserList_Fetch";
+import UserList_Axios from "src/app/components/UsersPage/UserList_Axios";
 
 const UsersPage: React.FunctionComponent = async () => {
-    const res = await fetch(
-        'https://jsonplaceholder.typicode.com/users',
-        // Passing Options Object
-        { cache: 'no-store'} // Disable Caching for frequently changing data or data that must be updated in
-        // realtime. This will change this to a dynamic server-rendered on demand using Node.js component
-        // Accessing Next.JS Config - Get Fresh Data Every 10 seconds
-        // This will keep this a static pre-rendered component
-        // { next: { revalidate: 10 } }
-    )
-    const users: User[] = await res.json();
-
-    return(
-        <>
-            <h1>Users</h1>
-            <p>Last Rendered Time: {new Date().toLocaleString()}</p>
-            <table className={"table table-ordered"}>
-                <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {users.map(user =>
-                        <tr
-                            key={user.id}
-                        >
-                            <td>
-                                {user.name}
-                            </td>
-                            <td>
-                                {user.email}
-                            </td>
-
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        </>
-    )
-}
+  return (
+    <>
+      {/*<UserList_Fetch />*/}
+      <UserList_Axios />
+    </>
+  );
+};
 
 export default UsersPage;

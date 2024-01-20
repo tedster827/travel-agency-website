@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React from "react";
 // React Hook Form is great for form validation and simplicity! It's validation and other features can be reused
 // through the project
 import { FieldValues, useForm } from "react-hook-form";
@@ -22,6 +22,8 @@ const formSchema = z.object({
         " contact support.",
     }),
   age: z
+    // NOTE that all number validation fields are not the digits like in the normal HTML validation, it is the
+    //  value min and max (age 18-9999 below)
     .number({
       invalid_type_error: "Please ensure that is a number and it is filled out",
     })
