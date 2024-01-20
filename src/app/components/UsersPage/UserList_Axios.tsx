@@ -1,7 +1,7 @@
 "use client";
-import apiClient, { CanceledError } from "src/services/api-client";
 import React, { useEffect, useState } from "react";
 import UserService, { Simple_User } from "src/services/user-service";
+import { CanceledError } from "src/services/api-client";
 
 const UserList_Axios: React.FunctionComponent = () => {
   const [users, setUsers] = useState<Simple_User[]>([]);
@@ -12,9 +12,8 @@ const UserList_Axios: React.FunctionComponent = () => {
   //  can be cancelled! Use AbortController a Browser API for modern browsers! It is used to cancel or abort
   //  asynchronous, or any long, operations. This also prevents calling the server twice!
   useEffect(() => {
-    const controller = new AbortController();
     setIsLoading(true);
-    const { request, cancel } = UserService.getAllUsers();
+    const { request, cancel } = UserService.getAll<Simple_User>();
     request
       .then((response) => {
         setUsers(response.data);
@@ -26,7 +25,7 @@ const UserList_Axios: React.FunctionComponent = () => {
         setError(error.message);
         setIsLoading(false);
       });
-    // finally method is for when the promise above has been resolved regardless if it resulted in error or not.
+    // The finally method is for when the promise above has been resolved regardless if it resulted in error or not.
     // .finally(() => {
     //   setIsLoading(false);
     // });
@@ -64,7 +63,7 @@ const UserList_Axios: React.FunctionComponent = () => {
         }
       }),
     );
-    const { request } = UserService.deleteSingleUser(user);
+    const { request } = UserService.delete(user.id);
     request.catch((error) => {
       setError(error.message);
       setUsers(originalUsers);
@@ -73,13 +72,13 @@ const UserList_Axios: React.FunctionComponent = () => {
 
   // Note: This is using an optimistic updated method, update UI first even if there may be an error. However, it
   //  will revert the UI if an error is returned.
-  const addUser = () => {
+  const createUser = () => {
     setIsLoading(true);
     const originalUsers: Simple_User[] = [...users];
     const newUser: Simple_User = { id: 0, name: "Tedster" };
     setUsers([...users, newUser]);
 
-    const { request } = UserService.addSingleUser(newUser);
+    const { request } = UserService.create(newUser);
 
     request
       // This form of destructing is adding a reference to data to be referred to as savedUser
@@ -112,7 +111,7 @@ const UserList_Axios: React.FunctionComponent = () => {
       }),
     );
 
-    const { request } = UserService.updateSingleUser(updatedUser);
+    const { request } = UserService.update(updatedUser);
 
     request
       .catch((error) => {
@@ -131,7 +130,7 @@ const UserList_Axios: React.FunctionComponent = () => {
         {isLoading && (
           <span className={"loading loading-spinner text-info"}></span>
         )}
-        <button className={"btn btn-primary mb-3"} onClick={addUser}>
+        <button className={"btn btn-primary mb-3"} onClick={createUser}>
           Add User
         </button>
         <div className={"overflow-x-auto"}>

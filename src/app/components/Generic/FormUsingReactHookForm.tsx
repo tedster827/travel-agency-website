@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React from "react";
 // React Hook Form is great for form validation and simplicity! It's validation and other features can be reused
 // through the project
 import { FieldValues, useForm } from "react-hook-form";

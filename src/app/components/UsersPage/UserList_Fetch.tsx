@@ -12,7 +12,7 @@ const UserList_Fetch: React.FunctionComponent = async () => {
     // Passing Options Object
     { cache: "no-store" }, // Disable Caching for frequently changing data or data that must be updated in
     // realtime. This will change this to a dynamic server-rendered on demand using Node.js component
-    // Accessing Next.JS Config - Get Fresh Data Every 10 seconds
+    // Accessing Next.js Config - Get Fresh Data Every 10 seconds
     // This will keep this a static pre-rendered component
     // { next: { revalidate: 10 } }
   );

@@ -151,7 +151,7 @@ amplify status
 ```bash
 npm run pull-request
 ```
-3. Open a Pull Request with Github
+3. Open a Pull Request with GitHub
 4. Push the code to your GitHub repository linked with AWS Amplify. Following the source control convention!
 5. AWS Amplify automatically detects the push and starts the build and deployment process.
 6. Monitor the deployment process in the AWS Amplify console.
@@ -160,7 +160,7 @@ Ensure that your AWS Amplify project settings are correctly configured to use th
 
 ## Known Issues
 
-Issue: AWS Amplify Node.JS Version Mismatch
+Issue: AWS Amplify Node.js Version Mismatch
 - Refer to Workaround for Node.js Version above
 
 Issue: Webpack Cache Error in Next.js
@@ -171,10 +171,11 @@ The warning [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error
 Steps to Troubleshoot & Resolve:
 
 Clearing the Webpack Cache
-a. Delete the .next Folder:
-Stop the Development Server: Ensure that your development server is not running.
-Delete the .next Directory: Locate and remove the .next directory in your project. This directory contains Next.js build files, including the webpack cache.
-Restart the Development Server: Use npm run dev or yarn dev to restart your development server. This process will rebuild the necessary files, including a fresh webpack cache.
+1. Delete the .next Folder:
+2. Stop the Development Server: Ensure that your development server is not running.
+3. Delete the .next Directory: Locate and remove the .next directory in your project.
+   (This directory contains Next.js build files, including the webpack cache.) 
+4. Restart the Development Server: Use npm run dev or yarn dev to restart your development server. This process will rebuild the necessary files, including a fresh webpack cache.
 
 ## Versioning
 

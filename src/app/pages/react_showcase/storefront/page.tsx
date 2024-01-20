@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import StorefrontNavBar from "src/projects-and-modules/react-showcase-project/components/MockStorefront/StorefrontNavBar";
 import Cart from "src/projects-and-modules/react-showcase-project/components/MockStorefront/Cart";
 import AddCartItemsButtons from "src/projects-and-modules/react-showcase-project/components/MockStorefront/AddCartItemsButtons";
-import { produce } from "immer";
 import ExpandableText from "src/app/components/Generic/ExpandableText";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
