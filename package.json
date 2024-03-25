@@ -19,6 +19,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^3.3.2",
+    "fabric": "^5.3.0",
+    "fabricjs-react": "^1.2.2",
     "framer-motion": "^11.0.3",
     "graphql": "^16.8.1",
     "immer": "^10.0.3",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@aws-amplify/datastore": "^5.0.5",
     "@testing-library/react": "^14.2.2",
+    "@types/fabric": "^5.3.7",
     "@types/node": "18.14.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
