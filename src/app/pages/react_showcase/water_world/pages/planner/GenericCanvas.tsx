@@ -6,10 +6,10 @@ import { Button } from "@chakra-ui/react";
 
 export default function GenericCanvas() {
   const { editor, onReady } = useFabricJSEditor();
-  const [canvasSize, setCanvasSize] = useState({ width: window.innerWidth, height: window.innerHeight });
   const canvasContainerRef = useRef(null); // Adds a ref for the parent container div
   const fileInputRef = useRef<HTMLInputElement>(null); // Adds a ref for the file upload.
   const canvasHistory = useRef<fabric.Object[]>([]);
+  const previousCanvasHistory = useRef<fabric.Object[]>([]);
 
   const [drawingModeButtonText, setDrawingModeButtonText] = useState("✏️ Toggle Drawing Mode ON 🟢");
   const [penSizeButtonText, setPenSizeButtonText] = useState("✏️➕ Increase Pen Size");
@@ -17,11 +17,30 @@ export default function GenericCanvas() {
 
   const [color, setColor] = useState("#35363a");
   const [cropImage, setCropImage] = useState(true);
+
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0});
   
   if(!fabric) {
     console.log("Package Error: fabric.js is installed improperly")
     return;
   }
+
+
+  // Note: Due to (SSR) Serverside Rendering constraints, this code won't have access to the client/browser only window object. This function runs to ensure that the canvasSize is set only if the window object is available
+  useEffect(() => {
+    // This code runs only in the browser where 'window' is defined
+    setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
+
+    // Optional: Handle window resize
+    const handleResize = () => {
+      setCanvasSize({ width: window.innerWidth, height: window.innerHeight });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener('resize', handleResize);
+  }, []); // Empty array ensures this effect only runs once after initial render
 
   /* #region Canvas Resizing Logic */
 
@@ -169,7 +188,7 @@ export default function GenericCanvas() {
 
   useEffect(() => {
     if(!editor) {
-      console.log("Package Error:")
+      console.log("Editor Still Loading ...")
       return;
     }
     let message = "Current Planner Modes:";
@@ -180,7 +199,6 @@ export default function GenericCanvas() {
       message += " Drawing OFF 🔴 |";
     }
   
-    console.log(editor.canvas.freeDrawingBrush.width)
     if (editor.canvas.freeDrawingBrush.width <= 5) {
       message += " Pen Size ▪️ (sm) |";
     } else {
@@ -236,6 +254,12 @@ export default function GenericCanvas() {
       console.log("Package Error: Fabric Editor is initialized improperly");
       return;
     }
+    if(editor.canvas._objects.length === 0 && previousCanvasHistory.current.length > 0) {
+      previousCanvasHistory.current.forEach((historyItem) =>{
+        editor.canvas._objects.push(historyItem)
+      })
+      return;
+    }
     if (editor.canvas._objects.length > 0) {
       // Removing the last item from the canvas and adding it to the history
       const removedItem = editor.canvas._objects.pop();
@@ -247,7 +271,13 @@ export default function GenericCanvas() {
   };
   
   const redo = () => {
-    if (canvasHistory.current.length > 0 && editor) {
+    if(!editor) {
+      console.log("Package Error: Editor still loading ...")
+      return;
+    }
+
+
+    if (canvasHistory.current.length > 0) {
       // Taking the last item from the history and adding it back to the canvas
       const item = canvasHistory.current.pop();
       if (item) {
@@ -262,6 +292,12 @@ export default function GenericCanvas() {
       console.log("Package Error: Fabric Editor is initialized improperly");
       return;
     }
+
+    // Saving a history if the undo button is clicked after clear.
+    editor.canvas._objects.forEach(historyItem => {
+      previousCanvasHistory.current.push(historyItem);
+    });
+
     // Clear all objects from the canvas
     editor.canvas._objects.splice(0, editor.canvas._objects.length);
     
@@ -296,6 +332,7 @@ export default function GenericCanvas() {
       return;
     }
     const svg = editor.canvas.toSVG();
+    alert(`Here's the image as an SVG!: \n\nNote: If the file is too large for this alert window please visit the dev console. \n\n${svg}`)
     console.info(svg);
   };
 
@@ -312,8 +349,10 @@ export default function GenericCanvas() {
 
   const onAddLine = () => {
     if(!editor) {
-      console.log("Package Error: Fabric Editor is initialized improperly")
+      console.log("Package Error: Fabric Editor is initialized improperly");
+      return;
     }
+    editor.addLine();
   }
 
   const onAddRectangle = () => {
@@ -334,57 +373,67 @@ export default function GenericCanvas() {
 
   /* #endregion */
 
-  console.log(canvasHistory)
-
   return (
     <div className="p-4">
       <h1 className="border-4 rounded mb-4 text-lg">{plannerModeMessage}</h1>
       <input type="file" ref={fileInputRef} onChange={addBackgroundFromFileUpload} />
-      <span>
-        <Button onClick={onAddCircle}>
+
+      
+      {/* Note: This conditional rendering is so that the user doesn't have the option to increase or decrease the pen size if the canvas isn't in drawing mode. */}
+      <div className="flex justify-center mt-2 mb-2 gap-4">
+        <Button onClick={toggleDraw}>
+            {drawingModeButtonText}
+        </Button>
+        {editor?.canvas.isDrawingMode && 
+          <Button onClick={toggleSize}>
+            {penSizeButtonText}
+          </Button>
+        }
+      </div>
+
+      <div className="flex justify-center mt-2 mb-2 gap-4">
+        <Button onClick={onAddCircle} disabled={true}>
           ➕ Add circle
         </Button>
         <Button onClick={onAddLine}>
           ➕ Add Line
         </Button>
-        <Button onClick={onAddRectangle} disabled={!cropImage}>
+        <Button onClick={onAddRectangle}>
           ➕ Add Rectangle
         </Button>
-        <Button onClick={addText} disabled={!cropImage}>
+        <Button onClick={addText}>
           ➕ Add Text
         </Button>
-        <Button onClick={toggleDraw} disabled={!cropImage}>
-          {drawingModeButtonText}
+      </div>
+
+      <div className="flex justify-center mt-2 mb-2 gap-4">
+        <Button onClick={clear}>
+          🆑 Clear
         </Button>
-        <Button onClick={toggleSize} disabled={!cropImage}>
-          {penSizeButtonText}
+        <Button onClick={undo}>
+          ↩️ Undo
         </Button>
-        <Button onClick={clear} disabled={!cropImage}>
-          Clear
+        <Button onClick={redo}>
+          ↪️ Redo
         </Button>
-        <Button onClick={undo} disabled={!cropImage}>
-          Undo
+        <Button onClick={removeSelectedObject}>
+          ␡ Delete
         </Button>
-        <Button onClick={redo} disabled={!cropImage}>
-          Redo
-        </Button>
-        <Button onClick={removeSelectedObject} disabled={!cropImage}>
-          Delete
-        </Button>
-        <Button onClick={(e) => setCropImage(!cropImage)}>Crop</Button>
-        <label hidden={!cropImage}>
-          <input
-            disabled={!cropImage}
-            type="color"
-            value={color}
-            onChange={(e) => setColor(e.target.value)}
-          />
-        </label>
-        <Button onClick={exportSVG} disabled={!cropImage}>
+        <Button onClick={exportSVG}>
           {" "}
           ToSVG
         </Button>
-      </span>
+      </div>
+
+      <div className="flex justify-center mt-2 mb-2 gap-4">
+        <h1>Pen and Shape Color Selection!</h1>
+        <input
+          type="color"
+          value={color}
+          onChange={(e) => setColor(e.target.value)}
+        />
+      </div>
+
       <div
         className="flex justify-center items-center w-full h-full bg-gray-200 border-8 rounded-lg"
         ref={canvasContainerRef}
