@@ -8,9 +8,10 @@ export default function GenericCanvas() {
   const { editor, onReady } = useFabricJSEditor();
   const canvasContainerRef = useRef(null); // Adds a ref for the parent container div
   const fileInputRef = useRef<HTMLInputElement>(null); // Adds a ref for the file upload.
-  const canvasHistory = useRef<fabric.Object[]>([]);
-  const previousCanvasHistory = useRef<fabric.Object[]>([]);
+  const canvasHistory = useRef<fabric.Object[]>([]); // Keeps track of user changes to the canvas for undo and redo
+  const previousCanvasHistory = useRef<fabric.Object[]>([]); // Keeps a copy of History if clear is selected but undo is then clicked
 
+  // States for button context
   const [drawingModeButtonText, setDrawingModeButtonText] = useState("✏️ Toggle Drawing Mode ON 🟢");
   const [penSizeButtonText, setPenSizeButtonText] = useState("✏️➕ Increase Pen Size");
   const [plannerModeMessage, setPlannerModeMessage] = useState(" Current Planner Modes: Drawing OFF 🔴 | Pen Size ▪️ (sm)");
@@ -23,6 +24,8 @@ export default function GenericCanvas() {
     console.log("Package Error: fabric.js is installed improperly")
     return;
   }
+
+  /* #region Canvas Resizing Logic */
 
 
   // Note: Due to (SSR) Serverside Rendering constraints, this code won't have access to the client/browser only window object. This function runs to ensure that the canvasSize is set only if the window object is available
@@ -41,8 +44,6 @@ export default function GenericCanvas() {
     return () => window.removeEventListener('resize', handleResize);
   }, []); // Empty array ensures this effect only runs once after initial render
 
-  /* #region Canvas Resizing Logic */
-
   // Function to resize the canvas to match the container's size
   const resizeCanvasToContainer = useCallback(() => {
     const container = canvasContainerRef.current;
@@ -56,25 +57,7 @@ export default function GenericCanvas() {
     }
   }, [editor]);
 
-  useEffect(() => {
-    // Resize the canvas when the editor is ready
-    if (editor?.canvas) {
-      resizeCanvasToContainer();
-    }
-  }, [editor, resizeCanvasToContainer]);
-
-  useEffect(() => {
-    // Add window resize listener to update canvas on resize
-    window.addEventListener('resize', resizeCanvasToContainer);
-    return () => {
-      window.removeEventListener('resize', resizeCanvasToContainer);
-    };
-  }, [resizeCanvasToContainer]);
-
-  /* #endregion */
-
-  /* #region useEffect calls to handle initial window sizing and resizes. */
-
+  // Initial Canvas Sizing
   useEffect(() => {
     if (!editor || !fabric) {
       return;
@@ -86,6 +69,7 @@ export default function GenericCanvas() {
     editor.canvas.renderAll();
   }, [editor?.canvas, canvasSize]);
 
+  // Canvas Resizing when window changes
   useEffect(() => {
       // Resize the canvas once the editor is ready and when the window resizes
       window.addEventListener('resize', resizeCanvasToContainer);
@@ -102,25 +86,6 @@ export default function GenericCanvas() {
   /* #endregion */
 
   /* #region Background Image Handling */
-
-  // FIXME: This and possibly other functions need to be updated to handle the default background render
-  const addBackground = () => {
-    if(!editor) {
-      console.log("Package Error: Fabric Editor is initialized improperly")
-      return;
-    }
-    fabric.Image.fromURL(
-      "https://thegraphicsfairy.com/wp-content/uploads/2019/02/Anatomical-Heart-Illustration-Black-GraphicsFairy.jpg",
-      (image) => {
-        console.log(typeof image)
-        console.log(image)
-        editor.canvas.setBackgroundImage(
-          image,
-          editor.canvas.renderAll.bind(editor.canvas)
-        );
-      }
-    );
-  };
 
   const addBackgroundFromFileUpload = () => {
     if (!fileInputRef.current) {
@@ -182,9 +147,6 @@ export default function GenericCanvas() {
   /* #endregion */
 
   /* #region Toggle/Mode Handlers */
-
-  // TODO: Have Drawing mode off when user clicks on any of the non-drawing buttons
-
   useEffect(() => {
     if(!editor) {
       console.log("Editor Still Loading ...")

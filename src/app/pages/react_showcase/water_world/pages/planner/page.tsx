@@ -18,7 +18,7 @@ const PlannerPage: React.FunctionComponent = () => {
         >
             <title>Water World - 📝 Planner 🛠️</title>
             <GenericNavigationBar
-                    title="🌊 Water World! 🐳 -- 📝 Planner 🛠️"
+                    title="🌊 Water World! 🐳  -  📝 Planner 🛠️"
                     homePagePath="/pages/react_showcase/water_world"
                     fontName="font-sans"
                     backgroundColor="bg-cyan-400"
