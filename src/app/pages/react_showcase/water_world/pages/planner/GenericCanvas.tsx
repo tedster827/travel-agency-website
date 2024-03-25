@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { fabric } from "fabric";
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
 import { Button } from "@chakra-ui/react";
@@ -13,30 +13,47 @@ export default function GenericCanvas() {
 
   const [drawingModeButtonText, setDrawingModeButtonText] = useState("✏️ Toggle Drawing Mode ON 🟢");
   const [penSizeButtonText, setPenSizeButtonText] = useState("✏️➕ Increase Pen Size");
-  const [plannerModeMessage, setPlannerModeMessage] = useState("Current Planner Modes: Drawing OFF 🔴 | Pen Size ▪️ (sm) | (WIP) Crop Mode OFF 🔴");
+  const [plannerModeMessage, setPlannerModeMessage] = useState(" Current Planner Modes: Drawing OFF 🔴 | Pen Size ▪️ (sm)");
 
   const [color, setColor] = useState("#35363a");
   const [cropImage, setCropImage] = useState(true);
-
-  // Handle window resizing
-  const containerRef = useRef<HTMLDivElement>(null); // Use this to reference the container div
   
   if(!fabric) {
     console.log("Package Error: fabric.js is installed improperly")
     return;
   }
 
+  /* #region Canvas Resizing Logic */
+
   // Function to resize the canvas to match the container's size
-  const resizeCanvasToContainer = () => {
-    if (containerRef.current && editor?.canvas) {
-        const width = containerRef.current.offsetWidth;
-        const height = containerRef.current.offsetHeight;
-        editor.canvas.setWidth(width);
-        editor.canvas.setHeight(height);
-        editor.canvas.calcOffset();
-        editor.canvas.renderAll();
+  const resizeCanvasToContainer = useCallback(() => {
+    const container = canvasContainerRef.current;
+    if (container && editor?.canvas) {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      editor.canvas.setWidth(width);
+      editor.canvas.setHeight(height);
+      editor.canvas.calcOffset();
+      editor.canvas.renderAll();
     }
-  };
+  }, [editor]);
+
+  useEffect(() => {
+    // Resize the canvas when the editor is ready
+    if (editor?.canvas) {
+      resizeCanvasToContainer();
+    }
+  }, [editor, resizeCanvasToContainer]);
+
+  useEffect(() => {
+    // Add window resize listener to update canvas on resize
+    window.addEventListener('resize', resizeCanvasToContainer);
+    return () => {
+      window.removeEventListener('resize', resizeCanvasToContainer);
+    };
+  }, [resizeCanvasToContainer]);
+
+  /* #endregion */
 
   /* #region useEffect calls to handle initial window sizing and resizes. */
 
@@ -49,7 +66,6 @@ export default function GenericCanvas() {
     editor.canvas.setHeight(canvasSize.height);
     editor.canvas.calcOffset();
     editor.canvas.renderAll();
-  // }, [editor?.canvas.backgroundImage, editor?.canvas, canvasSize]);
   }, [editor?.canvas, canvasSize]);
 
   useEffect(() => {
@@ -67,6 +83,9 @@ export default function GenericCanvas() {
 
   /* #endregion */
 
+  /* #region Background Image Handling */
+
+  // FIXME: This and possibly other functions need to be updated to handle the default background render
   const addBackground = () => {
     if(!editor) {
       console.log("Package Error: Fabric Editor is initialized improperly")
@@ -142,7 +161,8 @@ export default function GenericCanvas() {
     reader.readAsDataURL(file);
   };
   
-  
+  /* #endregion */
+
   /* #region Toggle/Mode Handlers */
 
   // TODO: Have Drawing mode off when user clicks on any of the non-drawing buttons
@@ -160,20 +180,15 @@ export default function GenericCanvas() {
       message += " Drawing OFF 🔴 |";
     }
   
-    if (editor.canvas.freeDrawingBrush.width === 5) {
+    console.log(editor.canvas.freeDrawingBrush.width)
+    if (editor.canvas.freeDrawingBrush.width <= 5) {
       message += " Pen Size ▪️ (sm) |";
     } else {
       message += " Pen Size ⬛️ (large) |";
     }
   
-    if (cropImage) {
-      message += " Crop Mode ON 🟢";
-    } else {
-      message += " Crop Mode OFF 🔴";
-    }
-  
     setPlannerModeMessage(message);
-  }, [editor?.canvas.isDrawingMode, editor?.canvas.freeDrawingBrush.width, cropImage])
+  }, [editor?.canvas.isDrawingMode, editor?.canvas.freeDrawingBrush.width])
 
   const toggleSize = () => {
     if(!editor) {
@@ -215,7 +230,7 @@ export default function GenericCanvas() {
 
   /* #endregion */
   
-
+  /* #region Action Button Handlers */
   const undo = () => {
     if (!editor) {
       console.log("Package Error: Fabric Editor is initialized improperly");
@@ -275,6 +290,18 @@ export default function GenericCanvas() {
     }    
   };
 
+  const exportSVG = () => {
+    if(!editor) {
+      console.log("Package Error: Fabric Editor is initialized improperly")
+      return;
+    }
+    const svg = editor.canvas.toSVG();
+    console.info(svg);
+  };
+
+  /* #endregion */
+
+  /* #region Add Shape Handlers */
   const onAddCircle = () => {
     if(!editor) {
       console.log("Package Error: Fabric Editor is initialized improperly")
@@ -296,6 +323,7 @@ export default function GenericCanvas() {
     }
     editor.addRectangle();
   };
+
   const addText = () => {
     if(!editor) {
       console.log("Package Error: Fabric Editor is initialized improperly")
@@ -304,14 +332,7 @@ export default function GenericCanvas() {
     editor.addText("inset text");
   };
 
-  const exportSVG = () => {
-    if(!editor) {
-      console.log("Package Error: Fabric Editor is initialized improperly")
-      return;
-    }
-    const svg = editor.canvas.toSVG();
-    console.info(svg);
-  };
+  /* #endregion */
 
   console.log(canvasHistory)
 
