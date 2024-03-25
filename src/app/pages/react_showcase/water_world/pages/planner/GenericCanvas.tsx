@@ -16,7 +16,6 @@ export default function GenericCanvas() {
   const [plannerModeMessage, setPlannerModeMessage] = useState(" Current Planner Modes: Drawing OFF 🔴 | Pen Size ▪️ (sm)");
 
   const [color, setColor] = useState("#35363a");
-  const [cropImage, setCropImage] = useState(true);
 
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0});
   
@@ -229,7 +228,7 @@ export default function GenericCanvas() {
     }
     editor.canvas.freeDrawingBrush.color = color;
     editor.setStrokeColor(color);
-  }, [color]);
+  }, [editor, color]);
 
 
   // Note: Instead of having a state var for draw mode, we can track it with editor.canvas.isDrawingMode
@@ -368,8 +367,32 @@ export default function GenericCanvas() {
       console.log("Package Error: Fabric Editor is initialized improperly")
       return;
     }
-    editor.addText("inset text");
+    editor.addText("insert text");
   };
+
+  const onAddSprinkler = () => {
+    if(!editor) {
+      console.log("Package Error: Fabric Editor is initialized improperly")
+      return;
+    }
+    editor.addText("💦");
+  }
+
+  const onAddPipe = () => {
+    if(!editor) {
+      console.log("Package Error: Fabric Editor is initialized improperly")
+      return;
+    }
+    editor.addText("🪈");
+  }
+
+  const onAddWaterSource = () => {
+    if(!editor) {
+      console.log("Package Error: Fabric Editor is initialized improperly")
+      return;
+    }
+    editor?.addText("🚰")
+  }
 
   /* #endregion */
 
@@ -392,7 +415,7 @@ export default function GenericCanvas() {
       </div>
 
       <div className="flex justify-center mt-2 mb-2 gap-4">
-        <Button onClick={onAddCircle} disabled={true}>
+        <Button onClick={onAddCircle}>
           ➕ Add circle
         </Button>
         <Button onClick={onAddLine}>
@@ -403,6 +426,18 @@ export default function GenericCanvas() {
         </Button>
         <Button onClick={addText}>
           ➕ Add Text
+        </Button>
+      </div>
+
+      <div className="flex justify-center mt-2 mb-2 gap-4">
+        <Button onClick={onAddSprinkler}>
+          🚿 Add Sprinkler
+        </Button>
+        <Button onClick={onAddPipe}>
+          🪈 Add Pipe
+        </Button>
+        <Button onClick={onAddWaterSource}>
+          🚰 Add Water Source
         </Button>
       </div>
 
